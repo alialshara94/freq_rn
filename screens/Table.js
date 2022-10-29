@@ -1,8 +1,12 @@
-import { View } from "react-native";
+import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export const Table = () => {
+export const Table = (props) => {
   return (
-    <View style={{backgroundColor:'gray', height:'100%', width:'100%'}}>
-    </View>
+    <SafeAreaView>
+      <View style={{ backgroundColor: props.color ? props.color : 'yellow', height: '100%', alignItems: 'center', justifyContent: 'flex-start' }} >
+        <Text>ALI NAEEM</Text>
+      </View>
+    </SafeAreaView>
   );
 };
