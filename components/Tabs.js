@@ -14,10 +14,14 @@ import {
 } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import Colors from '../app-colors.json';
+import { Container } from "./container";
+import { useNavigation } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
+  const navigation = useNavigation()
+  const route = useRef(undefined);
   const [keyboardStatus, setKeyboardStatus] = useState(undefined);
   const slide = useRef(new Animated.Value(0)).current;
 
@@ -36,14 +40,15 @@ const Tabs = () => {
     }).start();
   };
 
-  const TabBarSearchBtn = ({ children, onPress, keyboardStatus }) => {
-    const onBtnPress = () => {
-      slideDown();
-      onPress();
+  const TabBarSearchBtn = ({ children, keyboardStatus }) => {
+    const onPress = () => {
+      navigation.navigate('Table')
+        slideDown();
     };
+
     return (
       <TouchableOpacity
-        onPress={onBtnPress}
+        onPress={onPress}
         style={{
           top: keyboardStatus ? 0 : -30,
           justifyContent: "center",
@@ -79,6 +84,9 @@ const Tabs = () => {
   }, []);
   return (
     <Tab.Navigator
+      sceneContainerStyle={{
+        backgroundColor:Colors.color1
+      }}
       screenOptions={({ route }) => ({
         tabBarShowLabel: false,
         tabBarStyle: {
@@ -151,15 +159,14 @@ const Tabs = () => {
             );
           }
         },
-        headerShadowVisible: false,
-        headerBackgroundContainerStyle: { backgroundColor: Colors.color1 },
         header: () => {
           return (
             <Animated.View
               style={{
                 height: slide,
                 justifyContent: "flex-end",
-                marginBottom:-35,
+                marginBottom: -35,
+                backgroundColor: Colors.color1,
               }}
             >
               <View style={{
@@ -222,8 +229,12 @@ const Tabs = () => {
           }
         }}
       >
-        {() => {
-          return (<Home />)
+        {(props) => {
+          return (
+            <Container>
+              <Home {...props} />
+            </Container>
+          )
         }}
       </Tab.Screen>
       <Tab.Screen
@@ -246,19 +257,16 @@ const Tabs = () => {
             return < TabBarSearchBtn {...props} />
           },
         }}
-        listeners={{
-          tabPress: () => {
-            slideDown();
-          }
-        }}
+      >{() => null}</Tab.Screen>
+      <Tab.Screen
+        name="Table"
       >
-        {() => {
-          return (<Table color={'green'} />)
-        }}
-      </Tab.Screen>
-      <Tab.Screen name="Table">
-        {() => {
-          return (<Table />)
+        {(props) => {
+          return (
+            <Container>
+              <Table {...props} />
+            </Container>
+          )
         }}
       </Tab.Screen>
     </Tab.Navigator>
