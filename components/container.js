@@ -1,9 +1,9 @@
 import { SafeAreaView } from "react-native-safe-area-context"
-import Colors from '../app-colors.json';
+import {appColors} from '../appColors';
 
 export const Container = (props) => {
     return(
-        <SafeAreaView style={{backgroundColor:Colors.color1}} >
+        <SafeAreaView style={{backgroundColor:appColors.main}} >
             {props.children}
         </SafeAreaView>
     )

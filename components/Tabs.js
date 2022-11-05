@@ -4,31 +4,38 @@ import { Home } from "../screens/Home";
 import {
   Animated,
   Image,
-  Pressable,
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
   Keyboard
 } from "react-native";
 import { useEffect, useRef, useState } from "react";
-import Colors from '../app-colors.json';
 import { Container } from "./container";
 import { useNavigation } from "@react-navigation/native";
+import { Details } from "../screens/Details";
+import { appColors } from '../appColors';
+import { Store } from "../screens/zustand";
 
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
+  const { setSearch, setPage } = Store()
   const navigation = useNavigation()
-  const route = useRef(undefined);
-  const [keyboardStatus, setKeyboardStatus] = useState(undefined);
+  const [keyboardStatus, setKeyboardStatus] = useState(false);
   const slide = useRef(new Animated.Value(0)).current;
+
+  const HomeComponent = () => {
+    return (
+      <>
+      </>
+    )
+  }
 
   const slideDown = () => {
     Animated.timing(slide, {
       toValue: 100,
-      duration: 300,
+      duration: 500,
       useNativeDriver: false,
     }).start();
   };
@@ -43,26 +50,20 @@ const Tabs = () => {
   const TabBarSearchBtn = ({ children, keyboardStatus }) => {
     const onPress = () => {
       navigation.navigate('Table')
-        slideDown();
+      slideDown();
     };
 
     return (
       <TouchableOpacity
         onPress={onPress}
         style={{
-          top: keyboardStatus ? 0 : -30,
-          justifyContent: "center",
-          alignItems: "center",
-          ...style.shadow,
+          top: keyboardStatus ? 10 : -25,
+          ...style.center,
         }}
+        activeOpacity={0.8}
       >
         <View
-          style={{
-            width: 70,
-            height: 70,
-            borderRadius: 35,
-            backgroundColor: Colors.color2,
-          }}
+          style={style.searchBtn}
         >
           {children}
         </View>
@@ -70,91 +71,59 @@ const Tabs = () => {
     );
   };
   useEffect(() => {
-    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-      setKeyboardStatus(true);
-    });
-    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-      setKeyboardStatus(false);
-    });
+    let start = true
+    if (start) {
+      const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+        setKeyboardStatus(true);
+      });
+      const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+        setKeyboardStatus(false);
+      });
 
-    return () => {
-      showSubscription.remove();
-      hideSubscription.remove();
-    };
+      return () => {
+        showSubscription.remove();
+        hideSubscription.remove();
+      };
+    }
+    return () => start = false
   }, []);
   return (
     <Tab.Navigator
       sceneContainerStyle={{
-        backgroundColor:Colors.color1
+        backgroundColor: appColors.main
       }}
       screenOptions={({ route }) => ({
         tabBarShowLabel: false,
-        tabBarStyle: {
-          position: "absolute",
-          bottom: keyboardStatus ? 0 : 25,
-          left: 20,
-          right: 20,
-          elevation: 0,
-          backgroundColor: Colors.color1,
-          borderRadius: 15,
-          height: 90,
-          ...style.shadow,
-        },
+        tabBarStyle: { backgroundColor: appColors.white },
         tabBarIcon: ({ focused }) => {
           if (route.name == "Table") {
             return (
               <View
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  top: 10,
-                }}
+                style={style.center}
               >
                 <Image
-                  source={require("../assets/tablet.png")}
+                  source={require("../assets/tower.png")}
                   resizeMode="contain"
                   style={{
-                    width: 25,
-                    height: 25,
-                    tintColor: focused ? Colors.color2 : Colors.color3,
+                    ...style.iconSize,
+                    tintColor: focused ? appColors.btnPrimary : appColors.btnSecondary,
                   }}
                 />
-                <Text
-                  style={{
-                    color: focused ? Colors.color2 : Colors.color3,
-                    fontSize: 12,
-                  }}
-                >
-                  Table
-                </Text>
               </View>
             );
           } else if (route.name == "Home") {
             return (
               <View
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  top: 10,
-                }}
+                style={style.center}
               >
                 <Image
-                  source={require("../assets/home.png")}
+                  source={require("../assets/home1.png")}
                   resizeMode="contain"
                   style={{
-                    width: 25,
-                    height: 25,
-                    tintColor: focused ? Colors.color2 : Colors.color3,
+                    ...style.iconSize,
+                    tintColor: focused ? appColors.btnPrimary : appColors.btnSecondary,
                   }}
                 />
-                <Text
-                  style={{
-                    color: focused ? Colors.color2 : Colors.color3,
-                    fontSize: 12,
-                  }}
-                >
-                  Home
-                </Text>
               </View>
             );
           }
@@ -165,90 +134,83 @@ const Tabs = () => {
               style={{
                 height: slide,
                 justifyContent: "flex-end",
-                marginBottom: -35,
-                backgroundColor: Colors.color1,
+                marginBottom: -50,
+                backgroundColor: appColors.main,
               }}
             >
-              <View style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: 4,
-                borderWidth: 1,
-                borderColor: Colors.color3,
-                borderRadius: 10,
-                margin: 5
-              }} >
-                <TextInput
-                  placeholder="Search.."
-                  style={{
-                    width: '93%',
-                    height: '100%',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                />
-                <Image
-                  source={require("../assets/search2.png")}
-                  resizeMode="contain"
-                  style={{
-                    width: 20,
-                    height: 20,
-                    tintColor: Colors.color3,
-                  }}
-                />
+              <View style={{ ...style.searchBarCont }} >
+                <View style={style.searchBarTxtInArea} >
+                  <View style={{ width: '10%' }} >
+                    <Image
+                      source={require("../assets/search.png")}
+                      resizeMode="contain"
+                      style={{
+                        width: "70%",
+                        height: "70%",
+                        tintColor: appColors.btnSecondary,
+                      }}
+                    />
+                  </View>
+                  <View style={{ width: '85%' }} >
+                    <TextInput
+                      cursorColor={appColors.btnSecondary}
+                      placeholder="Search.."
+                      placeholderTextColor={appColors.btnSecondary}
+                      style={{
+                        height: '100%',
+                        width: '100%',
+                        backgroundColor: appColors.white,
+                      }}
+                      onChangeText={(e) => {
+                        setPage(1)
+                        setSearch(e)
+                      }}
+                    />
+                  </View>
+                </View>
+                <View style={style.searchBarIconArea} >
+                  <TouchableOpacity
+                    style={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}
+                    onPress={slideUp}
+                  >
+                    <Image
+                      source={require("../assets/scroll.png")}
+                      resizeMode="contain"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        tintColor: appColors.btnPrimary,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
-              <Pressable
-                style={{
-                  paddingVertical: 3,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  // backgroundColor:"rgba(0,0,0,0)"
-                }}
-                onPress={slideUp}
-              >
-                <View
-                  style={{
-                    width: 80,
-                    height: 5,
-                    backgroundColor: Colors.color3,
-                    borderRadius: 10
-                  }}
-                ></View>
-              </Pressable>
             </Animated.View>
           );
         },
+        tabBarHideOnKeyboard: true,
       })}
     >
       <Tab.Screen
         name="Home"
+        component={Home}
         listeners={{
           tabPress: () => {
             slideUp();
           }
         }}
-      >
-        {(props) => {
-          return (
-            <Container>
-              <Home {...props} />
-            </Container>
-          )
-        }}
-      </Tab.Screen>
+      />
       <Tab.Screen
         name="Search"
+        component={HomeComponent}
         options={{
-          tabBarHideOnKeyboard: true,
           tabBarIcon: ({ focused }) => (
             <Image
               source={require("../assets/search.png")}
               resizeMode="contain"
               style={{
-                width: 30,
-                height: 30,
-                tintColor: Colors.color1,
+                ...style.iconSize,
+                tintColor: appColors.btnPrimary,
               }}
             />
           ),
@@ -257,25 +219,30 @@ const Tabs = () => {
             return < TabBarSearchBtn {...props} />
           },
         }}
-      >{() => null}</Tab.Screen>
+      />
       <Tab.Screen
         name="Table"
-      >
-        {(props) => {
-          return (
-            <Container>
-              <Table {...props} />
-            </Container>
-          )
-        }}
-      </Tab.Screen>
+        component={Table}
+      />
+      <Tab.Screen
+        name="Details"
+        component={Details}
+        options={{
+          headerShown: false,
+          tabBarButton: () => null,
+          tabBarStyle: { display: 'none' }
+        }}/>
     </Tab.Navigator>
   );
 };
 
 const style = StyleSheet.create({
-  shadow: {
-    shadowColor: Colors.color4,
+  searchBtn: {
+    width: 60,
+    height: 60,
+    borderRadius: 50,
+    backgroundColor: "#FFD460",
+    shadowColor: appColors.btnSecondary,
     shadowOffset: {
       width: 0,
       height: 10,
@@ -283,6 +250,37 @@ const style = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.5,
     elevation: 5,
+  },
+  center: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  iconSize: {
+    width: 25,
+    height: 25,
+  },
+  searchBarCont: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: '60%',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  searchBarTxtInArea: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    backgroundColor: appColors.white,
+    borderRadius: 10,
+    width: '80%',
+    padding: 5
+  },
+  searchBarIconArea: {
+    backgroundColor: appColors.white,
+    padding: 9,
+    borderRadius: 10,
+    width: '12%'
   }
 });
 
