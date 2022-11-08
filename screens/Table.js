@@ -28,11 +28,22 @@ export const Table = (props) => {
         <View style={{
           ...style.IDXContainer,
           borderColor:
-            item.manager.includes("Civil") &&
-              item.manager.includes("Military") ?
-              "orange" :
-              item.manager.includes("Military") ?
-                "red" : "green"
+            item.manager ?
+              (item.manager.includes("Civil") &&
+                item.manager.includes("Military") ?
+                "gray" :
+                item.manager.includes("Civil") &&
+                  item.manager.includes("Shared") ?
+                  "gray" :
+                  item.manager.includes("Military") &&
+                    item.manager.includes("Shared") ?
+                    "gray" :
+                    item.manager.includes("Military") ?
+                      "red" :
+                      item.manager.includes("Civil") ?
+                        "green" :
+                        item.manager.includes("Shared") ?
+                          "orange" : "gray") : "gray"
         }} >
           <Image
             source={require("../assets/freq.png")}
@@ -40,11 +51,22 @@ export const Table = (props) => {
             style={{
               ...style.Icon,
               tintColor:
-                item.manager.includes("Civil") &&
-                  item.manager.includes("Military") ?
-                  "orange" :
-                  item.manager.includes("Military") ?
-                    "red" : "green"
+                item.manager ?
+                  (item.manager.includes("Civil") &&
+                    item.manager.includes("Military") ?
+                    "gray" :
+                    item.manager.includes("Civil") &&
+                      item.manager.includes("Shared") ?
+                      "gray" :
+                      item.manager.includes("Military") &&
+                        item.manager.includes("Shared") ?
+                        "gray" :
+                        item.manager.includes("Military") ?
+                          "red" :
+                          item.manager.includes("Civil") ?
+                            "green" :
+                            item.manager.includes("Shared") ?
+                              "orange" : "gray") : "gray"
             }}
           />
         </View>
@@ -59,20 +81,42 @@ export const Table = (props) => {
                   width: 15,
                   height: 15,
                   tintColor:
-                    item.manager.includes("Civil") &&
-                      item.manager.includes("Military") ?
-                      "orange" :
-                      item.manager.includes("Military") ?
-                        "red" : "green"
+                    item.manager ?
+                      (item.manager.includes("Civil") &&
+                        item.manager.includes("Military") ?
+                        "gray" :
+                        item.manager.includes("Civil") &&
+                          item.manager.includes("Shared") ?
+                          "gray" :
+                          item.manager.includes("Military") &&
+                            item.manager.includes("Shared") ?
+                            "gray" :
+                            item.manager.includes("Military") ?
+                              "red" :
+                              item.manager.includes("Civil") ?
+                                "green" :
+                                item.manager.includes("Shared") ?
+                                  "orange" : "gray") : "gray"
                 }}
               />
               <Text style={style.dataSubContent} >
                 {
-                  item.manager.includes("Civil") &&
-                    item.manager.includes("Military") ?
-                    "Shared" :
-                    item.manager.includes("Military") ?
-                      "Military" : "Civil"
+                  item.manager ?
+                    (item.manager.includes("Civil") &&
+                      item.manager.includes("Military") ?
+                      "Civil/Military" :
+                      item.manager.includes("Civil") &&
+                        item.manager.includes("Shared") ?
+                        "Civil/Shared" :
+                        item.manager.includes("Military") &&
+                          item.manager.includes("Shared") ?
+                          "Military/Shared" :
+                          item.manager.includes("Military") ?
+                            "Military" :
+                            item.manager.includes("Civil") ?
+                              "Civil" :
+                              item.manager.includes("Shared") ?
+                                "Shared" : "unspecified") : "unspecified"
                 }
               </Text>
             </View>

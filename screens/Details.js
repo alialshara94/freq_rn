@@ -87,17 +87,43 @@ export const Details = (props) => {
                                 style={{
                                     width: 15,
                                     height: 15,
-                                    tintColor: props.route.params.category == "Civil" ?
-                                        "green" :
-                                        props.route.params.category == "Military" ?
-                                            "red" : "orange"
+                                    tintColor:
+                                        props.route.params.category ?
+                                            (props.route.params.category.includes("Civil") &&
+                                                props.route.params.category.includes("Military") ?
+                                                "gray" :
+                                                props.route.params.category.includes("Civil") &&
+                                                    props.route.params.category.includes("Shared") ?
+                                                    "gray" :
+                                                    props.route.params.category.includes("Military") &&
+                                                        props.route.params.category.includes("Shared") ?
+                                                        "gray" :
+                                                        props.route.params.category.includes("Military") ?
+                                                            "red" :
+                                                            props.route.params.category.includes("Civil") ?
+                                                                "green" :
+                                                                props.route.params.category.includes("Shared") ?
+                                                                    "orange" : "gray") : "gray"
                                 }}
                             />
                             <Text style={style.categoryText} >
                                 {
-                                    props.route.params.category.includes(',')
-                                        ? "Shared"
-                                        : props.route.params.category
+                                    props.route.params.category ?
+                                        (props.route.params.category.includes("Civil") &&
+                                            props.route.params.category.includes("Military") ?
+                                            "Civil/Military" :
+                                            props.route.params.category.includes("Civil") &&
+                                                props.route.params.category.includes("Shared") ?
+                                                "Civil/Shared" :
+                                                props.route.params.category.includes("Military") &&
+                                                    props.route.params.category.includes("Shared") ?
+                                                    "Military/Shared" :
+                                                    props.route.params.category.includes("Military") ?
+                                                        "Military" :
+                                                        props.route.params.category.includes("Civil") ?
+                                                            "Civil" :
+                                                            props.route.params.category.includes("Shared") ?
+                                                                "Shared" : "unspecified") : "unspecified"
                                 }
                             </Text>
                         </View>

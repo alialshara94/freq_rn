@@ -62,7 +62,12 @@ export const fetchBandById = async ({ bandId }) => {
             for (const key in dataObj) {
                 if (typeof dataObj[key] == 'string') {
                     if (dataObj[key].trim().length > 0) {
-                        if (key == "itu_r1") {
+                        if (key == "manager") {
+                            data.push({
+                                key: "Band Manager",
+                                value: dataObj[key]
+                            })
+                        } else if (key == "itu_r1") {
                             data.push({
                                 key: "ITU Region 1 Allocated Services",
                                 value: dataObj[key]

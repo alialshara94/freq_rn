@@ -1,21 +1,12 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Table } from "../screens/Table";
 import { Home } from "../screens/Home";
-import {
-  Animated,
-  Image,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-  Keyboard
-} from "react-native";
-import { useEffect, useRef, useState } from "react";
-import { Container } from "./container";
-import { useNavigation } from "@react-navigation/native";
-import { Details } from "../screens/Details";
 import { appColors } from '../appColors';
+import { Table } from "../screens/Table";
 import { Store } from "../screens/zustand";
+import { Details } from "../screens/Details";
+import { useEffect, useRef, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Animated, Image, StyleSheet, TextInput, TouchableOpacity, View, Keyboard } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
@@ -25,12 +16,7 @@ const Tabs = () => {
   const [keyboardStatus, setKeyboardStatus] = useState(false);
   const slide = useRef(new Animated.Value(0)).current;
 
-  const HomeComponent = () => {
-    return (
-      <>
-      </>
-    )
-  }
+  const HomeComponent = () => { return (<> </>) }
 
   const slideDown = () => {
     Animated.timing(slide, {
@@ -39,6 +25,7 @@ const Tabs = () => {
       useNativeDriver: false,
     }).start();
   };
+  
   const slideUp = () => {
     Animated.timing(slide, {
       toValue: 0,
@@ -231,7 +218,7 @@ const Tabs = () => {
           headerShown: false,
           tabBarButton: () => null,
           tabBarStyle: { display: 'none' }
-        }}/>
+        }} />
     </Tab.Navigator>
   );
 };
